@@ -3,7 +3,13 @@ import type { FastifyInstance } from "fastify";
 
 
 const createApp = async () => {
-  const app = Fastify();
+  // const app = Fastify();
+  const app: FastifyInstance = Fastify({
+    logger: {
+      level: process.env.NODE_ENV === "production" ? "warn" : "info",
+    },
+  });
+
   app.get("/", async (req, reply) => {
     return { message: "obrigado" };
   });
