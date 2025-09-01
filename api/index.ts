@@ -1,8 +1,7 @@
-import type { FastifyInstance } from "fastify";
-import { VercelRequest, VercelResponse } from "@vercel/node";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
 import appInstance from "../src/app";
 
-// ✅ Production-ready Vercel handler
+// Vercel-compatible Fastify handler
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -10,8 +9,13 @@ export default async function handler(
   try {
     const app = await appInstance;
 
-    // Optional: narrow casting if you're certain these types align
-    (app as any)(req, res);
+    // Ensure Fastify is ready before handling the request
+    if (!app.ready) {
+      await app.ready();
+    }
+
+    // Use Fastify's built-in Vercel adapter
+    app.server.emit("request", req, res);
   } catch (err) {
     console.error("❌ Error handling Vercel request:", err);
 
