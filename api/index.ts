@@ -1,4 +1,4 @@
-import appInstance from "../src/app";
+import app from "../src/app";
 
 // export default async function handler(req: VercelRequest, res: VercelResponse) {
 //   await app.ready();
@@ -14,12 +14,13 @@ export default async function handler(
   res: VercelResponse
 ): Promise<void> {
   try {
-    const app = await appInstance;
+    // const app = await appInstance;
 
-    // Ensure Fastify is ready before handling the request
+    // // Ensure Fastify is ready before handling the request
     if (!app.ready) {
       await app.ready();
     }
+    // await app.ready();
 
     // Use Fastify's built-in Vercel adapter
     app.server.emit("request", req, res);
