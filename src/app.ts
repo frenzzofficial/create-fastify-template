@@ -3,6 +3,9 @@ import fastifyStatic from "@fastify/static";
 import type { FastifyInstance } from "fastify";
 import { configViews, Home } from "./libs/configs/config.view";
 
+// import routes
+import supabaseTestRoute from "./api/test/test.routes";
+import { envAppConfig } from "./libs/env/env.app";
 
 const createApp = async () => {
   const app: FastifyInstance = Fastify({
@@ -16,11 +19,11 @@ const createApp = async () => {
   await app.register(fastifyStatic, configViews);
 
   app.get("/", async (_req, reply) => {
-    return reply
-      .status(200)
-      .type("text/html")
-      .sendFile(Home);
+    return reply.status(200).type("text/html").sendFile(Home);
   });
+
+  // register api routes
+  app.register(supabaseTestRoute, { prefix: `${envAppConfig.API_PATH}/test` });
 
   app.get("/api/health", (_req, reply) => {
     return reply.status(200).send({
