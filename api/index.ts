@@ -8,7 +8,7 @@ export default async function handler(
   res: VercelResponse
 ): Promise<void> {
   try {
-    const app: FastifyInstance = await appInstance;
+    const app = await appInstance;
 
     // Optional: narrow casting if you're certain these types align
     (app as any)(req, res);
