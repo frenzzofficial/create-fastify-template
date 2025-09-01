@@ -17,10 +17,10 @@ export default async function handler(
     // const app = await appInstance;
 
     // // Ensure Fastify is ready before handling the request
-    if (!app.ready) {
-      await app.ready();
-    }
-    // await app.ready();
+    // if (!app.ready) {
+    //   await app.ready();
+    // }
+    await app.ready();
 
     // Use Fastify's built-in Vercel adapter
     app.server.emit("request", req, res);
