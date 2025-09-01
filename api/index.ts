@@ -1,4 +1,4 @@
-import app from "../src/app";
+import createApp from "../src/app";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 
 // Vercel-compatible Fastify handler
@@ -7,6 +7,7 @@ export default async function handler(
   res: VercelResponse
 ): Promise<void> {
   try {
+    const app = await createApp();
     // Ensure Fastify is ready
     await app.ready();
     // Use Fastify's built-in Vercel adapter

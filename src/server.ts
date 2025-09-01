@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import appInstance from "./app";
+import createApp from "./app";
 import { envAppConfig } from "./libs/env/env.app";
 
 // ✅ Load environment variables early
@@ -14,7 +14,7 @@ if (!envAppConfig.APP_PORT || !envAppConfig.API_PATH) {
 // ✅ Start server with safe async handling
 const startServer = async (): Promise<void> => {
   try {
-    const app = await appInstance;
+    const app = await createApp();
     const PORT = envAppConfig.APP_PORT;
 
     app.listen({ port: PORT }, () => {
