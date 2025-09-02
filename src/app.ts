@@ -5,6 +5,7 @@ import { envAppConfig } from "./libs/env/env.app";
 import { configViews, Home } from "./libs/configs/config.view";
 
 //import plugins
+// import dbPlugin from "./libs/db/db.plugin";
 import corsPlugin from "./libs/plugins/plugin.cors";
 import cookiePlugin from "./libs/plugins/plugin.cookie";
 import helmetPlugin from "./libs/plugins/plugin.helmet";
@@ -23,11 +24,14 @@ const createApp = async () => {
 
   //register all plugins
   //serve static files
+  await app.register(corsPlugin);
   await app.register(rateLimitPlugin);
   await app.register(cookiePlugin);
-  await app.register(corsPlugin);
   await app.register(helmetPlugin);
   await app.register(fastifyStatic, configViews);
+
+  //register all database plugins
+  // await app.register(dbPlugin);
 
   app.get("/", async (_req, reply) => {
     return reply.status(200).type("text/html").sendFile(Home);

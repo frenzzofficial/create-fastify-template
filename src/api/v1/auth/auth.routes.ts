@@ -1,85 +1,44 @@
 import type { RouteOptions } from "fastify";
 import createAuthErrorHandler from "./auth.error";
-// import *  as schemaHandler from "./auth.schemas";
-import * as authController from "./auth.controllers";
+import { validateBody } from "../../../libs/utils/utils.validate";
 
-const loginRoute: RouteOptions = {
+// import everything
+import * as replyHandler from "./auth.reply";
+import * as schemaHandler from "./auth.schemas";
+import * as controller from "./auth.controllers";
+
+const signupRoute: RouteOptions = {
+  method: "POST",
+  url: "/register",
+  preHandler: validateBody(schemaHandler.signupAuthSchema),
+  handler: controller.signupAuthController,
+  schema: replyHandler.signinReply,
+  errorHandler: createAuthErrorHandler("signup"),
+};
+const signinRoute: RouteOptions = {
   method: "POST",
   url: "/login",
-  handler: authController.loginAuthController,
-  errorHandler: createAuthErrorHandler("login"),
-  // schema: schemaHandler.loginAuthSchema,
+  preHandler: validateBody(schemaHandler.signinAuthSchema),
+  handler: controller.signinAuthController,
+  schema: replyHandler.signinReply,
+  errorHandler: createAuthErrorHandler("signin"),
 };
 
-// const profileRoute: RouteOptions = {
-//     method: "GET",
-//     url: "/profile",
-//     handler: authController.profileAuthController,
-//     errorHandler: errHandler.profileAuthError,
-// };
+const signoutRoute: RouteOptions = {
+  method: "POST",
+  url: "/logout",
+  handler: controller.signoutAuthController,
+  errorHandler: createAuthErrorHandler("signout"),
+};
 
-// const refreshTokenRoute: RouteOptions = {
-//     method: "POST",
-//     url: "/refresh",
-//     handler: authController.refreshTokenAuthController,
-//     errorHandler: errHandler.refreshTokenAuthError,
-// };
-
-// const logoutRoute: RouteOptions = {
-//     method: "POST",
-//     url: "/logout",
-//     handler: authController.logoutAuthController,
-//     errorHandler: errHandler.logoutAuthError,
-// };
-
-// const registerRoute: RouteOptions = {
-//     method: "POST",
-//     url: "/register",
-//     handler: authController.registerAuthController,
-//     errorHandler: errHandler.registerAuthError,
-//     schema: schemaHandler.registrationSchema,
-// };
-
-// const verifyEmailRoute: RouteOptions = {
-//     method: "POST",
-//     url: "/verify-email",
-//     handler: authController.verifyEmailAuthController,
-//     errorHandler: errHandler.verifyEmailAuthError,
-// };
-
-// const resetPasswordRoute: RouteOptions = {
-//     method: "POST",
-//     url: "/reset-password",
-//     handler: authController.resetPasswordAuthController,
-//     errorHandler: errHandler.resetPasswordAuthError,
-//     schema: schemaHandler.resetPasswordSchema,
-// };
-
-// const forgotPasswordRoute: RouteOptions = {
-//     method: "POST",
-//     url: "/forgot-password",
-//     handler: authController.forgotPasswordAuthController,
-//     errorHandler: errHandler.forgotPasswordAuthError,
-//     schema: schemaHandler.forgotPasswordSchema,
-// };
-
-export default [
-  loginRoute,
-  // profileRoute,
-  // refreshTokenRoute,
-  // logoutRoute,
-  // registerRoute,
-  // verifyEmailRoute,
-  // resetPasswordRoute,
-  // forgotPasswordRoute,
-];
+export default [signupRoute, signinRoute, signoutRoute];
 
 export type routesOptions =
-  | "login"
+  | "signup"
+  | "signin"
+  | "signout"
   | "profile"
   | "refreshToken"
-  | "logout"
-  | "register"
   | "verifyEmail"
   | "resetPassword"
   | "forgotPassword";
