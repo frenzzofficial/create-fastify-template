@@ -11,7 +11,13 @@ const envConfigSchema = z.object({
     .trim()
     .default("http://localhost:7164/api"),
   APP_RATE_LIMIT_MAX: z.number().default(10),
-  APP_RATE_LIMIT_TIME_WINDOW: z.string().default("1m"),
+  APP_RATE_LIMIT_TIME_WINDOW: z
+    .string()
+    .regex(
+      /^\d+[smhd]$/,
+      "Invalid time window format. Use formats like '1m', '30s', '2h', or '1d'."
+    )
+    .default("1m"),
 });
 
 // ✅ Validate process.env safely

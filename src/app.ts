@@ -7,10 +7,12 @@ import { configViews, Home } from "./libs/configs/config.view";
 //import plugins
 import corsPlugin from "./libs/plugins/plugin.cors";
 import cookiePlugin from "./libs/plugins/plugin.cookie";
+import helmetPlugin from "./libs/plugins/plugin.helmet";
+import rateLimitPlugin from "./libs/plugins/plugin.ratelimits";
 
 // import routes
 import supabaseTestRoute from "./api/test/test.routes";
-import rateLimitPlugin from "./libs/plugins/plugin.ratelimits";
+import authPlugin from "./api/v1/auth/auth.plugin";
 
 const createApp = async () => {
   const app: FastifyInstance = Fastify({
@@ -24,6 +26,7 @@ const createApp = async () => {
   await app.register(rateLimitPlugin);
   await app.register(cookiePlugin);
   await app.register(corsPlugin);
+  await app.register(helmetPlugin);
   await app.register(fastifyStatic, configViews);
 
   app.get("/", async (_req, reply) => {
@@ -32,6 +35,7 @@ const createApp = async () => {
 
   // register api routes
   app.register(supabaseTestRoute, { prefix: `${envAppConfig.API_PATH}/test` });
+  app.register(authPlugin);
 
   app.get("/api/health", (_req, reply) => {
     return reply.status(200).send({
