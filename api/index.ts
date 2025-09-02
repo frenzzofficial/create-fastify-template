@@ -10,6 +10,13 @@ export default async function handler(
     const app = await createApp();
     // Ensure Fastify is ready
     await app.ready();
+    app.ready((err) => {
+      if (err) {
+        console.error("Error connecting to any plugin:", err);
+        process.exit(1);
+      }
+      console.log("Successfully connected to all plugins");
+    });
     // Use Fastify's built-in Vercel adapter
     app.server.emit("request", req, res);
   } catch (err) {
