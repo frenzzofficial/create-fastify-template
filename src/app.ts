@@ -10,6 +10,7 @@ import cookiePlugin from "./libs/plugins/plugin.cookie";
 
 // import routes
 import supabaseTestRoute from "./api/test/test.routes";
+import rateLimitPlugin from "./libs/plugins/plugin.ratelimits";
 
 const createApp = async () => {
   const app: FastifyInstance = Fastify({
@@ -20,6 +21,7 @@ const createApp = async () => {
 
   //register all plugins
   //serve static files
+  await app.register(rateLimitPlugin);
   await app.register(cookiePlugin);
   await app.register(corsPlugin);
   await app.register(fastifyStatic, configViews);
